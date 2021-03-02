@@ -36,6 +36,19 @@ where not exists (select id1 from likes where likes.ID1 = Highschooler.id or lik
 order by grade, name
 
 ----------Q5
-select *
+select s1.name, s1.grade, s2.name, s2.grade
 from likes
-where 
+inner join Highschooler s1 on s1.id = Likes.ID1
+inner join Highschooler s2 on s2.id = Likes.ID2
+where likes.id2 not in (select id1 from likes)
+
+----------Q6
+select s1.name, s1.grade as Maingrade
+FROM Friend
+inner join Highschooler s1 on s1.id = Friend.ID1
+inner join Highschooler s2 on s2.id = Friend.ID2
+group by s1.name, s1.grade
+HAVING MIN(s2.grade) =  MAX(s2.grade) and MAX(s2.grade) = s1.grade
+order by s1.grade, s1.name
+
+----------Q7
