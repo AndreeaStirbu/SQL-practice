@@ -74,4 +74,18 @@ inner join friend ON friend.ID1 = specialFriends.ID1
 					and friend.ID2 IN (select friend.ID2 from friend where friend.ID1 = specialFriends.ID2)
 inner join Highschooler S3 ON S3.ID = friend.ID2
 
+----------Q8
+--Find the difference between the number of students in the school 
+--and the number of different first names.
+select COUNT(*) - COUNT(DISTINCT name)
+from Highschooler
 
+----------Q9
+--Find the name and grade of all students 
+--who are liked by more than one other student.
+select s2.name, s2.grade
+from likes l
+inner join Highschooler S1 on S1.ID = l.ID1
+inner join Highschooler S2 on S2.ID = l.ID2
+group by s2.name, s2.grade 
+having count(*) > 1
