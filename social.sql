@@ -52,3 +52,26 @@ HAVING MIN(s2.grade) =  MAX(s2.grade) and MAX(s2.grade) = s1.grade
 order by s1.grade, s1.name
 
 ----------Q7
+--For each student A who likes a student B where the two are not friends, find if they have a friend C in common (who can introduce them!). 
+--For all such trios, return the name and grade of A, B, and C.
+select specialFriends.Name1, 
+	   specialFriends.grade1, 
+	   specialFriends.Name2, 
+	   specialFriends.grade2,
+	   S3.name, 
+	   s3.grade
+from (
+	select distinct s1.name AS Name1, s1.ID as ID1, s1.grade AS grade1,
+	s2.name AS Name2, s2.ID AS ID2, s2.grade as grade2
+	from likes l
+	inner join Highschooler S1 on S1.ID = l.ID1
+	inner join Highschooler S2 on S2.ID = l.ID2
+	cross join friend  
+	where friend.ID1 = l.ID1
+	AND l.id2 NOT IN (select id2 from friend where id1 = l.id1)
+) specialFriends
+inner join friend ON friend.ID1 = specialFriends.ID1
+					and friend.ID2 IN (select friend.ID2 from friend where friend.ID1 = specialFriends.ID2)
+inner join Highschooler S3 ON S3.ID = friend.ID2
+
+
